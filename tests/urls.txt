@@ -1,0 +1,4 @@
+https://google.com
+https://example.com
+https://adult-content.example.com
+https://malware.example.com

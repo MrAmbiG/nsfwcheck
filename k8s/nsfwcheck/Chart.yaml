@@ -1,0 +1,13 @@
+apiVersion: v2
+name: nsfwcheck
+description: A Helm chart for the nsfwcheck umbrella service
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: urlsafe
+    version: 0.1.0
+    repository: "file://../urlsafe" # This is tricky in Helm, usually you package them
+  - name: imagesafe
+    version: 0.1.0
+    repository: "file://../imagesafe"

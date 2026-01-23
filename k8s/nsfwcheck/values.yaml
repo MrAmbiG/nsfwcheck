@@ -1,0 +1,33 @@
+# Default values for nsfwcheck (Umbrella Chart)
+replicaCount: 1
+
+namespace: sfwcheck
+createNamespace: true
+
+image:
+  repository: gajuambi/nsfwcheck
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+# Sub-charts configuration (if enabled or included as dependencies)
+urlsafe:
+  enabled: true
+  # urlsafe specific values can be overridden here
+  namespace: sfwcheck
+
+imagesafe:
+  enabled: true
+  # imagesafe specific values can be overridden here
+  namespace: sfwcheck
+
+# Configuration for service discovery across namespaces
+# The application will use these to construct service URLs
+# Format: http://<service-name>.<namespace>.svc.cluster.local
+serviceDiscovery:
+  useFullDomain: true
+  clusterDomain: "cluster.local"

@@ -1,0 +1,23 @@
+services:
+  nsfwcheck:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - URLSAFE_SERVICE_URL=http://urlsafe:8000
+      - IMAGESAFE_SERVICE_URL=http://imagesafe:3000
+    depends_on:
+      - urlsafe
+      - imagesafe
+
+  urlsafe:
+    image: gajuambi/urlsafe:latest
+    ports:
+      - "8001:8000"
+
+  imagesafe:
+    image: gajuambi/imagesafe:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
