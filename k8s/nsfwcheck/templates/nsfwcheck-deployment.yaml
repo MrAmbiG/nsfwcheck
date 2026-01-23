@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "nsfwcheck.fullname" . }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "nsfwcheck.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.nsfwcheck.replicaCount }}
   selector:
     matchLabels:
       {{- include "nsfwcheck.selectorLabels" . | nindent 6 }}
@@ -16,9 +16,9 @@ spec:
         {{- include "nsfwcheck.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: nsfwcheck
+          image: "{{ .Values.nsfwcheck.image.repository }}:{{ .Values.nsfwcheck.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.nsfwcheck.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8000
@@ -26,15 +26,15 @@ spec:
           env:
             - name: URLSAFE_SERVICE_URL
               {{- if .Values.serviceDiscovery.useFullDomain }}
-              value: "http://urlsafe.{{ .Values.namespace }}.svc.{{ .Values.serviceDiscovery.clusterDomain }}:8000"
+              value: "http://urlsafe.{{ .Release.Namespace }}.svc.{{ .Values.serviceDiscovery.clusterDomain }}:8000"
               {{- else }}
               value: "http://urlsafe:8000"
               {{- end }}
             - name: IMAGESAFE_SERVICE_URL
               {{- if .Values.serviceDiscovery.useFullDomain }}
-              value: "http://imagesafe.{{ .Values.namespace }}.svc.{{ .Values.serviceDiscovery.clusterDomain }}:3000"
+              value: "http://imagesafe.{{ .Release.Namespace }}.svc.{{ .Values.serviceDiscovery.clusterDomain }}:3000"
               {{- else }}
               value: "http://imagesafe:3000"
               {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.nsfwcheck.resources | nindent 12 }}

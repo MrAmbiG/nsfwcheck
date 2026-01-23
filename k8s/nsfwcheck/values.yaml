@@ -1,33 +1,63 @@
-# Default values for nsfwcheck (Umbrella Chart)
-replicaCount: 1
-
+# Global settings
 namespace: sfwcheck
 createNamespace: true
 
-image:
-  repository: gajuambi/nsfwcheck
-  pullPolicy: Always
-  tag: "latest"
-
-service:
-  type: ClusterIP
-  port: 80
-  targetPort: 8000
-
-# Sub-charts configuration (if enabled or included as dependencies)
-urlsafe:
-  enabled: true
-  # urlsafe specific values can be overridden here
-  namespace: sfwcheck
-
-imagesafe:
-  enabled: true
-  # imagesafe specific values can be overridden here
-  namespace: sfwcheck
-
-# Configuration for service discovery across namespaces
-# The application will use these to construct service URLs
-# Format: http://<service-name>.<namespace>.svc.cluster.local
+# Service Discovery
+# Format: http://<service-name>.<namespace>.svc.<clusterDomain>:<port>
 serviceDiscovery:
   useFullDomain: true
   clusterDomain: "cluster.local"
+
+# nsfwcheck (Wrapper API)
+nsfwcheck:
+  replicaCount: 1
+  image:
+    repository: gajuambi/nsfwcheck
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    port: 80
+    targetPort: 8000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# urlsafe (Python API)
+urlsafe:
+  replicaCount: 2
+  image:
+    repository: gajuambi/urlsafe
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    port: 8000
+    targetPort: 8000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# imagesafe (Node.js API)
+imagesafe:
+  replicaCount: 2
+  image:
+    repository: gajuambi/imagesafe
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    port: 3000
+    targetPort: 3000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi

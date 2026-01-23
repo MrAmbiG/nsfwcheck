@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urlsafe
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: urlsafe
+spec:
+  replicas: {{ .Values.urlsafe.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: urlsafe
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: urlsafe
+    spec:
+      containers:
+        - name: urlsafe
+          image: "{{ .Values.urlsafe.image.repository }}:{{ .Values.urlsafe.image.tag }}"
+          imagePullPolicy: {{ .Values.urlsafe.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.urlsafe.resources | nindent 12 }}

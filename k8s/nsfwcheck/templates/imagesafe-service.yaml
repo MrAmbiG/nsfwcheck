@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: imagesafe
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: imagesafe
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.imagesafe.service.port }}
+      targetPort: {{ .Values.imagesafe.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: imagesafe
