@@ -10,6 +10,6 @@ dependencies = [
     "numpy>=2.4.1",
     "opencv-python-headless>=4.13.0.90",
     "pydantic-settings>=2.12.0",
-    "python-multipart>=0.0.21",
+    "python-multipart>=0.0.31",
     "uvicorn>=0.40.0",
 ]
